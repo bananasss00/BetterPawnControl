@@ -37,7 +37,7 @@
   <ItemGroup>
     <Reference Include="0Harmony, Version=1.2.0.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Downloads\Harmony\Current\Assemblies\0Harmony.dll</HintPath>
+      <HintPath>..\..\Downloads\Harmony.2.1.0.0\net472\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp, Version=0.19.6814.14576, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -46,7 +46,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="HugsLib">
-      <HintPath>D:\Steam\steamapps\common\RimWorld\Mods\HugsLib\Assemblies\HugsLib.dll</HintPath>
+      <HintPath>..\..\Downloads\HugsLib_8.0.1\HugsLib\Assemblies\HugsLib.dll</HintPath>
       <HintPath Condition="Exists('$(Home)\Library')">$(Home)\Library\Application Support\Steam\steamapps\common\RimWorld\RimWorldMac.app\Mods\818773962\Assemblies\HugsLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />

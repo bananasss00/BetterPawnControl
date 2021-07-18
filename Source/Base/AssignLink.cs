@@ -62,6 +62,13 @@ namespace BetterPawnControl
                 ref hostilityResponse, 
                 "hostilityResponse", HostilityResponseMode.Flee, true);
             Scribe_Values.Look<int>(ref loadoutId, "loadoutId", 1, true);
+            if (Scribe.mode == LoadSaveMode.LoadingVars)
+            {
+                if (loadoutId == 0)
+                {
+                    this.loadoutId = 1;
+                }
+            }
             Scribe_Values.Look<int>(ref mapId, "mapId", 0, true);
         }
     }
