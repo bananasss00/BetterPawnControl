@@ -62,7 +62,7 @@ namespace BetterPawnControl
                     link = new WorkLink(
                         WorkManager.GetActivePolicy().id,
                         p,
-                        new Dictionary<WorkTypeDef, int>(),
+                        new List<WorkPriority>(),
                         currentMap);
                     WorkManager.links.Add(link);
                     WorkManager.SavePawnPriorities(p, link);
@@ -160,9 +160,14 @@ namespace BetterPawnControl
         {
             if (link.settings != null)
             {
+                link.settings.Clear();
                 foreach (var worktype in DefDatabase<WorkTypeDef>.AllDefsListForReading)
                 {
-                    link.settings.SetOrAdd(worktype, p.workSettings.GetPriority(worktype));
+                    foreach (var giver in worktype.WorkGivers())
+                    {
+                        var priorities = Widget_WorkTab.GetPriorities(p, giver);
+                        link.settings.Add(new WorkPriority(giver, priorities));
+                    }
                 }
             }
         }
@@ -171,9 +176,13 @@ namespace BetterPawnControl
         {
             if (link.settings != null)
             {
-                foreach (KeyValuePair<WorkTypeDef, int> entry in link.settings)
+                foreach (var workPriority in link.settings)
                 {
-                    p.workSettings.SetPriority(entry.Key, link.settings.TryGetValue(entry.Key));
+                    for (var hour = 0; hour < workPriority.Priorities.Length; hour++)
+                    {
+                        var priority = workPriority.Priorities[hour];
+                        Widget_WorkTab.SetPriority(p, workPriority.Workgiver, priority, hour);
+                    }
                 }
             }
         }

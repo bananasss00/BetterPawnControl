@@ -17,7 +17,7 @@ namespace BetterPawnControl
             ScheduleManager.LoadState(ScheduleManager.links, ScheduleManager.Colonists().ToList(), ScheduleManager.GetActivePolicy());
             ScheduleManager.showPaste = false;
 
-            if( !Widget_ModsAvailable.DisableBPCOnWorkTab)
+            if(Widget_WorkTab.WorkTabAvailable)
             {
                 WorkManager.LoadState(WorkManager.links, WorkManager.Colonists().ToList(), WorkManager.GetActivePolicy());
                 WorkManager.showPaste = false;

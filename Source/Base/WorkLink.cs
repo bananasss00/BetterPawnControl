@@ -1,15 +1,78 @@
 ﻿using RimWorld;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Verse;
 
 namespace BetterPawnControl
 {
+    public class WorkPriority : IExposable
+    {
+        private WorkGiverDef workgiver;
+
+        // Scribe
+        public WorkPriority()
+        {
+        }
+
+        public WorkPriority(WorkGiverDef workgiver, int[] priorities)
+        {
+            this.workgiver = workgiver;
+            if (priorities.Length != GenDate.HoursPerDay)
+                throw new ArgumentException();
+            Priorities = priorities;
+        }
+
+        public int[] Priorities { get; private set; }
+
+        public WorkGiverDef Workgiver => workgiver;
+
+        public void ExposeData()
+        {
+            try
+            {
+                Scribe_Defs.Look(ref workgiver, "Workgiver");
+            }
+            catch (Exception e)
+            {
+                Log.Warning(
+                    "[BPC] WorkTab :: failed to load priorities. Did you disable a mod? If so, this message can safely be ignored." +
+                    e.Message +
+                    "\n\n" +
+                    e.StackTrace);
+            }
+
+            if (Scribe.mode == LoadSaveMode.Saving)
+            {
+                var _priorities = string.Join("", Priorities.Select(i => i.ToString()).ToArray());
+                Scribe_Values.Look(ref _priorities, "Priorities");
+            }
+
+            if (Scribe.mode == LoadSaveMode.LoadingVars)
+            {
+                var _priorities = "";
+                Scribe_Values.Look(ref _priorities, "Priorities");
+                Priorities = _priorities.ToArray().Select(c => int.Parse(c.ToString())).ToArray();
+            }
+        }
+
+        public WorkPriority Clone()
+        {
+            var clone = new WorkPriority()
+            {
+                Priorities = (int[])Priorities.Clone(),
+                workgiver = workgiver
+            };
+            return clone;
+        }
+    }
+
+
     public class WorkLink : Link, IExposable
     {
         //internal int zone = 0;
         internal Pawn colonist = null;
-        internal Dictionary<WorkTypeDef, int> settings =  null;
+        internal List<WorkPriority> settings =  null;
         //internal int mapId = 0;
 
         public WorkLink() { }
@@ -18,12 +81,12 @@ namespace BetterPawnControl
         {
             this.zone = link.zone;
             this.colonist = link.colonist;
-            this.settings = new Dictionary<WorkTypeDef, int>(link.settings);
+            this.settings = link.settings.Select(x => x.Clone()).ToList();
             this.mapId = link.mapId;
         }
 
         public WorkLink(
-            int zone, Pawn colonist, Dictionary<WorkTypeDef, int> settings, int mapId)
+            int zone, Pawn colonist, List<WorkPriority> settings, int mapId)
         {
             this.zone = zone;
             this.colonist = colonist;
@@ -49,23 +112,7 @@ namespace BetterPawnControl
             Scribe_References.Look<Pawn>(ref colonist, "colonist");
             Scribe_Values.Look<int>(ref mapId, "mapId", 0, true);
 
-            List<WorkTypeDef> keys = new List<WorkTypeDef>();
-            List<int> values = new List<int>();
-
-            if (Scribe.mode == LoadSaveMode.Saving)
-            {
-                foreach (KeyValuePair<WorkTypeDef, int> entry in settings)
-                {
-                    keys.Add(entry.Key);
-                    values.Add(entry.Value);
-                }
-                Scribe_Collections.Look(ref settings, "settings", LookMode.Def, LookMode.Value, ref keys, ref values);
-            }
-
-            if (Scribe.mode == LoadSaveMode.LoadingVars)
-            {
-                Scribe_Collections.Look(ref settings, "settings", LookMode.Def, LookMode.Value, ref keys, ref values);
-            }
+            Scribe_Collections.Look(ref settings, "Priorities", LookMode.Deep/*, this*/);
         }
     }
 }

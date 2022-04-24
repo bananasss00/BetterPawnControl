@@ -108,7 +108,7 @@ namespace BetterPawnControl
                     switch(entry.Key)
                     {
                         case Resources.Type.work:
-                            if (!Widget_ModsAvailable.DisableBPCOnWorkTab)
+                            if (Widget_WorkTab.WorkTabAvailable)
                             {
                                 WorkManager.LoadState(entry.Value);
                             }

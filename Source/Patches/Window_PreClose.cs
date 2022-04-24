@@ -21,7 +21,7 @@ namespace BetterPawnControl.Patches
                 AssignManager.LinksCleanUp();
             }
 
-            if ( (__instance.GetType().Equals(typeof(MainTabWindow_Work)) || __instance.GetType().FullName.Equals(WORKTAB_MAINTAB)) &&  !Widget_ModsAvailable.DisableBPCOnWorkTab)
+            if ( (__instance.GetType().Equals(typeof(MainTabWindow_Work)) || __instance.GetType().FullName.Equals(WORKTAB_MAINTAB)) && Widget_WorkTab.WorkTabAvailable)
             {
                 WorkManager.SaveCurrentState(WorkManager.Colonists().ToList());
                 WorkManager.LinksCleanUp();
