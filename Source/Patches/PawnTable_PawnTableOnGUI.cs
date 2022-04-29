@@ -13,6 +13,7 @@ namespace BetterPawnControl.Patches
     static class PawnTable_PawnTableOnGUI
     {
         private const string NUMBERS_DEFNAME = "Numbers_Animals";
+        private const string MISCROBOTS_DEFNAME = "AIRobots";
 
         static void Postfix(PawnTable __instance, Vector2 position, PawnTableDef ___def)
         {
@@ -35,6 +36,11 @@ namespace BetterPawnControl.Patches
             if (___def == PawnTableDefOf.Animals || ___def.defName == NUMBERS_DEFNAME)
             {
                 DrawAnimalBPCButtons(__instance, position);
+            }
+
+            if (___def.defName == MISCROBOTS_DEFNAME && Widget_ModsAvailable.MiscRobotsAvailable)
+            {
+                DrawSheduleBPCButtons(__instance, position);
             }
         }
 

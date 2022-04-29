@@ -10,6 +10,14 @@ namespace BetterPawnControl
     {
         internal static List<ScheduleLink> clipboard = new List<ScheduleLink>();
 
+        internal new static IEnumerable<Pawn> Colonists()
+        {
+
+            return from p in Find.CurrentMap.mapPawns.PawnsInFaction(Faction.OfPlayer)
+                where p.IsColonist || p.def.thingClass?.FullName == "AIRobot.X2_AIRobot"
+                select p;
+        }
+
         internal static void FixActivePolicies()
         {
             activePolicies = new List<MapActivePolicy>();
@@ -97,7 +105,7 @@ namespace BetterPawnControl
         {
             for (int i = ScheduleManager.links.Count - 1; i >= 0; i--)
             {
-                if (ScheduleManager.links[i].colonist == null || !ScheduleManager.links[i].colonist.IsColonist)
+                if (ScheduleManager.links[i].colonist == null || (!ScheduleManager.links[i].colonist.IsColonist && ScheduleManager.links[i].colonist.def.thingClass?.FullName != "AIRobot.X2_AIRobot"))
                 {
                     ScheduleManager.links.RemoveAt(i);
                 }
@@ -200,7 +208,7 @@ namespace BetterPawnControl
 
         internal static void LoadState(Policy policy)
         {
-            List<Pawn> pawns = Find.CurrentMap.mapPawns.FreeColonists;
+            List<Pawn> pawns = Find.CurrentMap.mapPawns.PawnsInFaction(Faction.OfPlayer).Where(p => p.IsColonist || p.def.thingClass?.FullName == "AIRobot.X2_AIRobot").ToList();
             LoadState(ScheduleManager.links, pawns, policy);
         }
 
@@ -255,7 +263,7 @@ namespace BetterPawnControl
                     copiedLink.zone = policy.id;
                     ScheduleManager.links.Add(copiedLink);
                 }
-                ScheduleManager.LoadState(links, Find.CurrentMap.mapPawns.FreeColonists.ToList(), policy);
+                ScheduleManager.LoadState(links, Find.CurrentMap.mapPawns.PawnsInFaction(Faction.OfPlayer).Where(p => p.IsColonist || p.def.thingClass?.FullName == "AIRobot.X2_AIRobot").ToList(), policy);
             }
         }
     }

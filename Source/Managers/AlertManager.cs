@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Verse;
 using Verse.AI;
 
@@ -48,7 +49,7 @@ namespace BetterPawnControl
 
         internal static void PawnsInterruptForced()
         {
-            List<Pawn> Pawns = Find.CurrentMap.mapPawns.FreeColonists;
+            List<Pawn> Pawns = Find.CurrentMap.mapPawns.PawnsInFaction(Faction.OfPlayer).Where(p => p.IsColonist || p.def.thingClass?.FullName == "AIRobot.X2_AIRobot").ToList();
             foreach (Pawn pawn in Pawns)
             {
                 pawn.mindState.priorityWork.ClearPrioritizedWorkAndJobQueue();

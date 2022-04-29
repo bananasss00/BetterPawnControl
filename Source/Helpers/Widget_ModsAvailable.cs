@@ -11,6 +11,7 @@ namespace BetterPawnControl
     public static class Widget_ModsAvailable
     {
         private const string ANIMALTAB= "Animal Tab";
+        private const string MISCROBOTS = "Misc. Robots";
         private const string CSL = "Children, school and learning";
         private const string AAF = "Assign Animal Food";
 
@@ -25,6 +26,14 @@ namespace BetterPawnControl
             get
             {
                 return LoadedModManager.RunningMods.Any(mod => mod.Name == ANIMALTAB);
+            }
+        }
+
+        public static bool MiscRobotsAvailable
+        {
+            get
+            {
+                return LoadedModManager.RunningMods.Any(mod => mod.Name == MISCROBOTS);
             }
         }
 
