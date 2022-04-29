@@ -178,11 +178,7 @@ namespace BetterPawnControl
             {
                 foreach (var workPriority in link.settings)
                 {
-                    for (var hour = 0; hour < workPriority.Priorities.Length; hour++)
-                    {
-                        var priority = workPriority.Priorities[hour];
-                        Widget_WorkTab.SetPriority(p, workPriority.Workgiver, priority, hour);
-                    }
+                    Widget_WorkTab.SetPriority(p, workPriority.Workgiver, workPriority.Priorities);
                 }
             }
         }
