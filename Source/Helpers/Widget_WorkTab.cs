@@ -193,6 +193,13 @@ namespace BetterPawnControl
 
         private static PrioritiesReflected _prioritiesReflected;
 
+        public static void Reset()
+        {
+            // re-initalize all wrappers, after create new game or load save
+            // because after ExposeData PriorityManager.priorities has new instance!!!
+            _initialized = false;
+        }
+
         public static bool WorkTabAvailable
         {
             get

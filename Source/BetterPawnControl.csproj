@@ -78,6 +78,7 @@
     <Compile Include="Base\AssignLink.cs" />
     <Compile Include="Helpers\Widget_WorkTab.cs" />
     <Compile Include="Patches\FloatMenu_PostClose.cs" />
+    <Compile Include="Patches\MemoryUtility_ClearAllMapsAndWorld.cs" />
     <Compile Include="Patches\Pawn_DefaultPolicies.cs" />
     <Compile Include="Patches\MainTabWindow_PawnTable_PostOpen.cs" />
     <Compile Include="Helpers\Widget_ModsAvailable.cs" />
